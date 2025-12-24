@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+u=
+c=
+while getopts "uc" o; do
+  case $o in
+    u) u=-u;;
+    c) c=-c;;
+  esac
+done
+shift $(($OPTIND - 1))
+
+if (( $# < 2 )); then
+  echo usage: nc-self [-u] 127.0.0.1 27015
+  exit 1
+fi
+
+ip=$1
+port=$2
+port2=${3-$2}
+
+echo "sudo nc $u -vlp $port2"
+sudo echo
+sudo nc $u -vlp $port2 &
+
+sleep 0.1
+
+if [ "$c" ]; then
+  echo "echo kktest | nc -vc $u $ip $port"
+  echo kktest | nc -vc $u $ip $port
+else
+  echo "nc -v $u $ip $port"
+  nc -v $u $ip $port
+fi
+
+sleep 10 &&
+echo &&
+kill $! & # kill nc server, if don't answer too long
+
+wait -n
+kill $! # kill the sleep-kill process, if answered
+echo

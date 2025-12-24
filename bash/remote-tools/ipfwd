@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+help() {
+  echo "usage: ipfwd 2 -A|-D 25565 27015:27017"
+}
+
+trap 'help' ERR
+
+(( $# < 3 )) && help && exit 1
+
+eth=eth0
+ip=10.8.0.$1  # 10.8.0.2
+opt=$2        # -A, -D
+ufwd=
+[[ $opt == "-D" ]] && ufwd=delete
+
+for port in "${@:3}"; do
+  for tcp in tcp udp; do
+
+    echo ufw $opt $port/$tcp
+    sudo ufw $ufwd allow $port/$tcp
+
+    echo iptables $opt $ip:$port/$tcp
+    sudo iptables $opt PREROUTING -t nat -i $eth -p $tcp -m multiport --dports $port -j DNAT --to $ip
+    sudo iptables $opt FORWARD -p $tcp -d $ip -m multiport --dports $port -j ACCEPT
+
+  done
+done
