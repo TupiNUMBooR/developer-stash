@@ -1,0 +1,4 @@
+#!/bin/bash
+for f in battle chill pop compilations; do
+  find ~/k/music/$f -name "*.opus" > ~/.config/cmus/playlists/$f
+done

@@ -1,0 +1,20 @@
+#!/bin/bash
+set -e
+
+kbkp khome || :
+
+kbkp torrents &
+kbkp git &
+kbkp trello &
+ks3 uw || : &
+wait
+sync
+
+ks3 2023 || :
+sync
+
+ks3 -d to-wolf &
+ks3 -d vpn4 &
+ks3 -d vpn3 &
+wait
+sync

@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+. k-vars.sh
+header "kbkp chatgpt"
+
+dir1="$k/localhost/.ChatGPT"
+dir2="$k/to-sync/personal/backups/ChatGPT"
+date=$(date -u +%Y-%m)
+
+rsync -ahPi "vpn4:~/ChatGPT/" "$dir1"
+
+mkdir -p "$dir2"
+rsync "$dir1"/* "$dir2/$date"
+cd "$dir2"
+7z a -mx9 $dir2/$date.7z $dir2/$date &&
+rm -r "$dir2/$date"

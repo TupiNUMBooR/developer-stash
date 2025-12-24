@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+case $1 in
+  mag) #magenta
+    DISPLAY=:0 ssh hawk 'notify-send "Checking succeeded"'
+    ;;
+  shut) #burgundy
+    ssh -t hawk 'sudo shutdown 0'
+    ;;
+  burg2)
+    ssh -t hawk 'echo 1 | sudo tee /proc/sys/kernel/sysrq; echo o | sudo tee /proc/sysrq-trigger'
+    ;;
+esac

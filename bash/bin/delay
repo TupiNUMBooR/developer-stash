@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+header() { echo -e "\e[1;32m$@\e[0m"; }
+header waiting until $(date -d "$1" "+%F %T")
+
+while [ $(date -d "$1" +%s) -ge $(date +%s) ]; do
+  sleep 0.5
+done

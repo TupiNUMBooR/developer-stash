@@ -1,0 +1,17 @@
+#!/bin/bash
+remaining="$1"
+id=$RANDOM
+while [ "$remaining" -gt 0 ]; do
+echo -ne "[$id] Remaining sleep time: $remaining seconds\033[0K\r"
+sleep 1
+((remaining--))
+done
+echo -e "[$id] Sleep complete\033[0K\r"
+
+exit
+
+tmux new-session -d -s mysession 'sleep_with_progress 10'
+tmux split-window -v 'sleep_with_progress 5'
+tmux split-window -v 'sleep_with_progress 3'
+tmux select-layout even-vertical
+tmux attach-session -t mysession

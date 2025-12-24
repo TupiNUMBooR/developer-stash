@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+. k-vars.sh
+
+cat << EOF >> ~/.bashrc
+PATH="${PATH}:~/bin"
+alias ffmpeg='ffmpeg -hide_banner'
+alias ffprobe='ffprobe -hide_banner'
+alias ffplay='ffplay -hide_banner'
+alias avconv='avconv -hide_banner'
+
+advice | cowsay -f three-eyes | lolcat
+EOF
+
+f=~/.config/mc/ini
+awk 'BEGIN{FS="=";OFS="="} $1=="skin"{gsub(".*","modarcon16",$2)}1' $f > $f.tmp &&
+mv $f.tmp $f

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+opts=
+remove=
+while getopts "dnrl" o; do
+  case $o in
+  d) opts="$opts -d cvm";;
+  n) opts="$opts -n -cvm";;
+  r) remove=1;;
+  l) lossless=-l
+  esac
+done
+
+c() {
+  cv $1 $opts "${@:2}"
+  [ $remove ] && rm "${@:2}"
+}
+
+c webp *.jp{,e}g &
+c webp$lossless *.png
+wait
+c opus *.{mp3,wav,flac,ogg}
+c mkv *.{wmv,avi,mp4,mkv,webm}

@@ -1,0 +1,17 @@
+# For local run and for push to dockerhub
+services:
+  nodejs-helloworld:
+    image: tupinumboor/nodejs-helloworld
+    container_name: nodejs-helloworld
+    restart: always
+    ports:
+      - "$PORT:$PORT"
+    env_file:
+      - .env
+    build:
+      context: .
+      args:
+        VERSION: ${VERSION}
+      tags:
+        - "tupinumboor/nodejs-helloworld:${VERSION}"
+        - "tupinumboor/nodejs-helloworld:latest"

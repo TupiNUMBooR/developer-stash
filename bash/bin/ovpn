@@ -1,0 +1,17 @@
+#!/bin/bash
+cd ~/k/store/personal/docs/ovpn/
+
+ktmx() {
+  sess=$1
+  command="${@:2}"
+  echo $command
+  sleep 1
+  if ! $(tmux has -t $sess 2> /dev/null); then
+    tmux new-session -s $sess \
+      $command
+  else
+    tmux attach -t $sess
+  fi
+}
+
+ktmx ovpn sudo openvpn vpn5/wolf.ovpn

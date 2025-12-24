@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+total_duration=0
+echo
+
+for file in "$@"; do
+    duration=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$file") &&
+    printf "%-35s\t%s\n" "$file:" "$(date -u -d @${duration%.*} +"%T")" &&
+    total_duration=$(echo "$total_duration + $duration" | bc)
+done
+
+echo -e "$(printf '%.0s-' {1..40})\n"
+printf "%-35s\t%s\n" "Total Duration:" "$(date -u -d @${total_duration%.*} +"%T")"

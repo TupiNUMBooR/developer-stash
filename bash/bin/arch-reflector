@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+if [ "$EUID" -ne 0 ]; then
+  reflector -c 'Russia,'
+else
+  sudo reflector -c 'Russia,' --sort rate \
+    --save /etc/pacman.d/mirrorlist
+fi
+#reflector --download-timeout 2 -c Europe,Russia --score 20 --sort rate --save /etc/pacman.d/mirrorlist

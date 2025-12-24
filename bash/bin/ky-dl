@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+cert=
+mkdir -p ~/k/port/dl
+cd ~/k/port/dl
+if [[ "$*" == *"motherless.com"* ]]; then
+    cert="--no-check-certificates"
+fi
+if [[ "$*" == *"skillbox.ru"* ]]; then
+    cook="--cookies-from-browser firefox"
+fi 
+
+proxychains yt-dlp --all-subs $cook $cert "$@" &

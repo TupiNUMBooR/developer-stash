@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+help() {
+  echo "usage: [-a12]"
+}
+
+a=false
+m1=false
+m2=false
+
+while getopts "a12" o; do
+  case $o in
+    a) a=true;;
+    1) m1=true;;
+    2) m2=true;;
+  esac
+done
+
+command=
+command2=
+suf=
+
+if ! ($a || $m1 || $m2); then
+  help
+  exit 1
+fi
+
+if $m1 || $m2; then
+  ext=mkv
+else
+  ext=opus
+fi
+
+if $m1 || $m2; then
+  if $m1 && $m2; then
+    d=4480x1440
+    p=0,0
+    suf=$suf"m12"
+  elif $m1; then
+    d=2560x1440
+    p=1920,0
+    suf=$suf"m1"
+  elif $m2; then
+    d=1920x1080
+    p=0,200
+    suf=$suf"m2"
+  fi
+  command="$command -video_size $d -framerate 60 -f x11grab -i :0.0+$p"
+  command2="$command2 -c:v libx264 -crf 18 -preset veryfast"
+fi
+
+if $a; then
+  command="$command -f pulse -i default"
+  command2="$command2 -c:a libopus"
+  suf=$suf"a"
+fi
+
+ffmpeg $command $command2 ~/Downloads/capture_${suf}_$(date -u "+%F_%H-%M-%SZ").$ext

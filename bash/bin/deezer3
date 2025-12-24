@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+# pip install py-deezer music_tag
+import os
+import sys
+import pydeezer
+import pydeezer.constants
+import music_tag
+
+dargs = {'quality': pydeezer.constants.track_formats.FLAC, 'concurrent_downloads': 5}
+deezer = pydeezer.Deezer(arl="8511863119b1dff43a0a62954063659bfb0be06f0f443d71be6bf07e7458ba557a776503255a5a69de7590d0b5f2b8b6c4d682cb381272dcada03bc32ea8d1c3fc7f84be2c0da6438f5af3670e7ae9fd46ea2d723c5ca595ba4ce261afc2cbd2")
+
+tracks = deezer.search_tracks(sys.argv[1])
+print(f"Found {len(tracks)} tracks")
+print(*[f"{t['artist']['name']} - {t['title']}" for t in tracks], sep='\n')
+
+titles=[t['title'] for t in tracks]
+if any(titles.count(x) > 1 for x in titles):
+    for t in tracks:
+        pydeezer.Downloader(deezer, [t['id']], f"deezer/{t['id']}", **dargs).start()
+else:
+    pydeezer.Downloader(deezer, [t['id'] for t in tracks], 'deezer', **dargs).start()
+
+files = os.listdir('deezer')
+for f in files:
+    try:
+        f = f"deezer/{f}"
+        tags = music_tag.load_file(f)
+        os.rename(f, f"deezer/{tags['album_artist']} - {tags['title']}.{tags['#codec']}")
+    except:
+        print(f"{f} fail")
+
+

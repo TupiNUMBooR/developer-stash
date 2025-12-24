@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+
+for device in "FB10C Mouse" "HS6209 A4tech 2.4G Wireless Device Mouse"; do
+  # xinput list-props "$device"
+  xinput set-prop "$device" "Coordinate Transformation Matrix" 1 0 0 0 1 0 0 0 2
+done

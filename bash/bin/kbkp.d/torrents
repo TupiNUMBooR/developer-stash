@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+. k-vars.sh
+header "kbkp torrents"
+
+urldecode() {
+    local url=$1
+    [ -z $url ] && read url
+    url="${url//+/ }"
+    url="${url//%/\\x}"
+    printf '%b' "$url\n"
+}
+
+t=$k/to-sync/backups/torrents/magnets-$(date -u +%Y-%m).list
+d="$k/localhost/torrents"
+mkdir -p ${t%/*}
+rm -f $t
+for f in $d/*; do
+    transmission-show -m "$f" | urldecode >>$t
+done
+xz -f $t
+header "kbkp torrents done"

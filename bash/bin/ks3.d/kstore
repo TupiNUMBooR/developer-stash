@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+. k-vars.sh
+
+dir=backups/git
+
+from=$k/to-sync/$dir/*
+to=$k/mnt/kstore-v2/$dir
+
+test-mount $k/mnt/kstore-v2
+log-rsync $from $to
+mkdir -p $to
+$pre rsync -vahPi $args $from $to

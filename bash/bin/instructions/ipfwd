@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+eth=$1  # eth0, wlan0
+ip=$2   # 10.8.0.2
+opt=$3  # -A, -D
+tcp=$4  # tcp udp
+port=$5 # 25565
+
+if [ -z "$1" ]; then
+  echo usage: ipfwd eth0 10.8.0.2 -A udp 25565
+  exit 1
+fi
+
+sudo iptables $opt PREROUTING -t nat -i $eth -p $tcp --dport $port -j DNAT --to $ip:$port
+sudo iptables $opt FORWARD -p $tcp -d $ip --dport $port -j ACCEPT
+

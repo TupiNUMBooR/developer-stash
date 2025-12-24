@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+. k-vars.sh
+
+bkp=$khist/gamedata/RimWorld
+sav=~/.config/unity3d/"Ludeon Studios"/"RimWorld by Ludeon Studios"
+wshp=~/.steam/steam/steamapps/workshop/content/294100
+day=$(date -u +%F)
+
+rmm() {
+  for f in $@; do
+    rm -vrf $f | wc -l | awk '{print $1" '"$f"'"}'
+  done
+}
+
+o=$1
+shift
+case $o in
+bkp)
+  cd "$sav"/.. &&
+    savb="$(basename "$sav")" &&
+    mkdir -p "$bkp" &&
+    7z a -mx9 "$bkp"/rw_bkp_$day.7z "$savb" \
+      -x\!"$savb"/Saves \
+      -x\!"$savb"/MpReplays \
+      -x\!"$savb"/CrossPromotions \
+      -x\!"$savb"/RealRuins
+
+  (($# > 0)) &&
+    mkdir -p "$bkp"/saves2 &&
+    cd "$sav"/Saves &&
+    for s in $@; do
+      7z a -mx9 "$bkp"/saves2/"$s".7z "$s"
+    done
+  ;;
+clr)
+  case $1 in
+  sav)
+    cd "$sav" &&
+      rmm CrossPromotions
+    #rmm RealRuins
+    ;;
+  mods)
+    cd $wshp
+    rmm "*/Source"
+    rmm "*/[0-1]*/Source"
+    rmm "*/v[0-1]*/Source"
+    rmm "*/.vs"
+    rmm "*/.git"
+    rmm "*/.gitignore"
+    ;;
+  esac
+  ;;
+mod)
+  case $1 in
+  ce)
+    ce=$wshp/1631756268
+    xmlstarlet ed -L -u "/Defs/StatDef[@Name='BulkStat']/defaultBaseValue" -v 0.01 $ce/Defs/Stats/Stats_Basics_Inventory.xml
+    ;;
+  esac
+  ;;
+pawns)
+  for f in "$sav/Saves/"*"$2"*.rws; do
+    echo -e "\e[36m\n$f\e[0m:"
+    xmlstarlet sel -t -m "/savegame/game/maps/li/things/thing\
+      [@Class='Pawn'][def='Human' or def='ChjAndroid']\
+      [faction='Faction_$1']" \
+      -v name/first -o " '" -v name/nick -o "' " -v name/last -o " " \
+      --if "gender='Female'" -o [F] --else -o [M] --break\
+      --if "def='ChjAndroid'" -o [A] --break\
+      -n1 "$f"
+  done
+  ;;
+*)
+  err "no option $o"
+  ;;
+esac

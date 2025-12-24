@@ -1,0 +1,41 @@
+#!/bin/bash
+
+help() {
+  h="usage: key [type] [action]
+types:
+  a: xdotool key XF86Audio\e[1;34m\${action}\e[0m
+    actions:\n"
+  for k in ${!a[@]}; do h+="      $k - ${a[$k]}\n"; done
+  h+="      other actions are just substituted
+  l: gnome-screensaver-command -l
+  n: notify-send [args]\n"
+  >&2 printf "$h"
+}
+
+declare -A a=(
+  [p]=Play [s]=Stop
+  [pr]=Prev [n]=Next
+  [l]=LowerVolume [r]=RaiseVolume
+)
+
+case $1 in
+    a)
+      action=$2
+      [ ${a[$action]} ] && action=${a[$action]}
+      export DISPLAY=':0'
+      echo xdotool key XF86Audio$action
+      xdotool key XF86Audio$action
+      ;;
+    l)
+      gnome-screensaver-command -l ||
+      export DISPLAY=':0' &&
+      xdotool key super+l
+      ;;
+    n)
+      notify-send "${*:2}"
+      ;;
+    *)
+      help
+      exit 2
+      ;;
+esac

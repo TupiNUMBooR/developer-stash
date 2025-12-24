@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+. k-vars.sh
+
+from=$k/crypto/aes/uw.aes
+to=$k/mnt/khist2024-heavy
+
+test-mount $to
+log-rsync $from $to
+$pre rsync -ahPi $args $from $to

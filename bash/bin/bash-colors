@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+for f in {1..110}; do echo -e "\e[${f}m$f\e[0m"; done

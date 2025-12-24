@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+cd ~/.steam/steam/steamapps/common/U3DS
+
+sess=unt-server-$1
+server=Survarium-$1
+
+if [ ! -d "Servers/$server" ]; then
+  echo -e "\e[91mmust specify number\e[0m"
+  ls Servers
+  exit 1
+fi
+
+if ! $(tmux has -t $sess 2> /dev/null); then
+  tmux new-session -d -s $sess \
+    ./ServerHelper.sh +InternetServer/Survarium-$1
+fi
+
+tmux attach -t $sess

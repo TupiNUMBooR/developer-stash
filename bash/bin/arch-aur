@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -e
+[ -z "$1" ] && echo "no argument" && exit 1
+. k-vars.sh
+
+cd "$k/localhost/AUR"
+[ ! -d "$1" ] && git clone "https://aur.archlinux.org/$1.git"
+cd "$1"
+makepkg -sri

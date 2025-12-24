@@ -1,0 +1,10 @@
+#!/bin/sh
+#redshift-gtk
+
+test $(cut -d '.' -f1 /proc/uptime) -lt 30 && sleep 5;
+pkill conky
+conky -c ~/.config/conky/hawk-base.conf
+conky -c ~/.config/conky/hawk-temp.conf
+
+#modprobe i2c-dev
+#ddcutil setvcp 10 100

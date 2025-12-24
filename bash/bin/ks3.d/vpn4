@@ -1,0 +1,7 @@
+#!/bin/bash
+. k-vars.sh
+from="$k/crypto/cryfs/khist2024"
+from2="$k/crypto/cryfs/kstore-v2"
+to=vpn4:~/cryfs
+log-rsync $from $to
+$pre rsync -a --info=progress2 $args $from $from2 $to #| grep -E '^[^.]'

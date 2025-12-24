@@ -1,0 +1,15 @@
+#!/bin/bash
+. k-vars.sh
+k=/run/media/keller/kret/k
+crypto=$k/crypto
+links=$k/mnt
+prog=$1
+file=$2
+[ -z "$prog" ] || [ -z "$file" ] && err "Usage: kc2 [cry] [2020]" 1
+[ "$prog" == cry ] || [ "$prog" == enc ] && prog="${prog}fs"
+
+cd $crypto/$prog
+for f in *"$file"*; do
+  header "$prog $crypto/$prog/$f $links/$f"
+  $prog "$crypto/$prog/$f" "$links/$f"
+done

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -e
+
+rbp3="6C:D3:EE:1B:9A:12"
+
+bluetoothctl power on
+bluetoothctl pair "$rbp3"
+bluetoothctl trust "$rbp3"
+bluetoothctl connect "$rbp3"

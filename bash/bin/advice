@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -e
+. k-vars.sh
+
+cd "$k/.advice/"
+adv=$(cat *.txt | sed '/\s*#.*$/d' | sed '/^$/d' | shuf -n 1)
+from=$(grep -Fl "$adv" *.txt | head -n 1 | sed 's/.txt$//')
+echo "[$from] $adv"

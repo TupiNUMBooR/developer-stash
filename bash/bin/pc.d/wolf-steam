@@ -1,0 +1,4 @@
+#!/bin/sh
+
+xinput set-prop "DELL09E1:00 04F3:30CB Touchpad" "Device Enabled" 0
+tmux new-session -d -s steam prime-run steam

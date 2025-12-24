@@ -1,0 +1,3 @@
+- [Automation variables | Trello | Atlassian Support](https://support.atlassian.com/trello/docs/automation-variables/)
+- [Arithmetic and formatting in date variables | Trello | Atlassian Support](https://support.atlassian.com/trello/docs/arithmetic-and-formatting-in-date-variables/)
+- [Finding or looking up cards (Automation advanced topic) | Trello | Atlassian Support](https://support.atlassian.com/trello/docs/finding-or-looking-up-cards-butler-advanced-topic/)

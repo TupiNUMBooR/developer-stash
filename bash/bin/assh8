@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+sess=ssh8
+if ! $(tmux has -t $sess 2> /dev/null); then
+    tmux new-session -d -s $sess \
+    autossh -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -D 8888 vpn4
+fi
+# -J vpn3

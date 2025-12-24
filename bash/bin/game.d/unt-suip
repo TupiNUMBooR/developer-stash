@@ -1,0 +1,62 @@
+#!/bin/sh
+#Show Unturned Item Params
+
+if [ -z $1 ] || [ -z $2 ]
+then
+  >&2 printf "Show Unturned Item Params: unturned-suip item stat [map]
+  items: Guns, Melee, Vests, Shirts, Pants
+  stat: Player_Damage, Wear, Durability, Armor
+  map: Belgium, Greece, California, or any default
+"
+  exit 2
+fi
+
+suip() {
+  fld=$1
+  stat=$2
+  printf "\n$1\n"
+  for item in $(ls "$fld"); do
+    f="$1/$item/$item.dat"
+    awk '$1=="'$stat'" { printf "%-24s %3g\n", "'$item'", $2 }' "$f" #TODO check and replace printf
+  done
+}
+
+cd ~/.steam/steam/steamapps/common/Unturned
+
+items=$1
+stat=$2
+map=$3
+
+suip Bundles/Items/$items $stat
+if [ ! -z $map ]; then
+  if [ $map = "Canyon Arena" ]; then
+    suip Maps/$map/Bundles/Items/$items $stat
+  elif [ $map = "Greece" ]; then
+    suip ../../workshop/content/304930/1702240229/Greece/Bundles/Items/Greece $stat
+  elif [ $map = "Belgium" ]; then
+    suip ../../workshop/content/304930/1767554683/Bundles/Items/$items $stat
+  elif [ $map = "California" ]; then
+    suip ../../workshop/content/304930/1905768396/California/Bundles/Items/$items $stat
+  elif [ $map = "Carpat" ]; then
+    suip ../../workshop/content/304930/1497352180/Carpat/Bundles/Items/$items $stat
+  elif [ $map = "Rio" ]; then
+    suip ../../workshop/content/304930/1821848824/"Rio de Janeiro"/Bundles/Items/$items $stat
+  elif [ $map = "Kuwait" ]; then
+    suip ../../workshop/content/304930/2483365750/Kuwait/Bundles/Items/$items $stat
+  elif [ $map = "Ireland" ]; then
+    suip ../../workshop/content/304930/1411633953/Ireland/Bundles/Items/$items $stat
+  elif [ $map = "Russia+" ]; then
+    suip ../../workshop/content/304930/2475218356/Russia+/Bundles/Items/$items $stat
+  elif [ $map = "Ural" ]; then
+    #suip ../../workshop/content/304930/1205209275/"Ural Mountains LN"/Bundles/Items/$items $stat
+    suip ../../workshop/content/304930/1440592288/Bundles/Items/$items $stat
+    suip ../../workshop/content/304930/1816910583/1755044692/Gun/Strong_Pack/GUNS/GUNS/$items/* $stat
+  elif [ $map = "Buak" ]; then
+    suip ../../workshop/content/304930/3000549606/Buak/Bundles/Items/$items $stat
+  elif [ $map = "Rio" ]; then
+    suip "../../workshop/content/304930/1821848824/Rio de Janeiro/Bundles/Items/$items" $stat
+  else
+    suip Maps/$map/Bundles/Items/$map/$items $stat
+  fi
+fi
+

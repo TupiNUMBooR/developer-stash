@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+. k-credentials.sh
+
+dir=~/Downloads/ChatGPT
+gpt="proxychains $(dirname $BASH_SOURCE)/gpt.py"
+
+# $gpt "$1"
+# exit
+
+filename=$($gpt "Come up with a filename. It must be short, using underscores instead of spaces and lower case only. Filename should reflect your potential answer for the prompt: $1" | tr -d ' \t\n')
+filename=$(date -u +%F_%H-%M-%S)_$filename
+mkdir -p "$dir"
+echo "$filename"
+echo "$1\n\n" > "$dir/$filename"
+$gpt "$1" | tee -a "$dir/$filename"

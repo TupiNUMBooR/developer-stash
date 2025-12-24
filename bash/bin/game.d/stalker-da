@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+dim=1920x1080
+
+cd ~/Games/"Dead Air"
+
+u=appdata/user.ltx
+awk '/vid_mode/{sub($2,"'$dim'")}1' $u > $u.tmp && mv $u.tmp $u
+
+#xrandr --output DVI-D-0 --right-of HDMI-A-1
+wine explorer /desktop=Wine,$dim xrEngine.exe -dbg
+set-hawk
+
+#explorer /desktop=Wine,1855x1020
+#1850x1024

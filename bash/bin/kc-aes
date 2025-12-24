@@ -1,0 +1,31 @@
+#!/bin/bash
+set -e
+. k-vars.sh
+encrypt=
+
+while getopts "e" o; do
+  case $o in
+  e) encrypt=1;;
+  esac
+done
+shift $(($OPTIND - 1))
+
+cd $k/crypto/aes
+for f in $@; do
+  if [ $encrypt ]; then
+    [ ! -d "$f" ] && err "No dir (*$f*) to encrypt"
+    read -sp "Password: " p
+    openssl enc -d -aes-256-cbc -pbkdf2 -in "$f.aes" -pass pass:"$p" >/dev/null # if this check fails, program stops
+    mv "$f.aes" "$f.old.aes"
+    tar -cf "$f.tar" "$f"
+    openssl enc -aes-256-cbc -pbkdf2 -in "$f.tar" -out "$f.aes" -pass pass:"$p"
+    # rm -rf "$f"{,.tar}
+    rm -rf "$f".tar
+  else
+    [ ! -f "$f.aes" ] && err "No file (*$f*.aes) to decrypt"
+    [ -d "$f" ] && err "dir ($f) exists"
+    openssl enc -d -aes-256-cbc -pbkdf2 -in "$f.aes" -out "$f.tar"
+    tar -xf "$f.tar"
+    rm "$f".tar
+  fi
+done

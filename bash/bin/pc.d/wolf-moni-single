@@ -1,0 +1,6 @@
+#!/bin/sh
+m1=eDP-1
+m2=HDMI-1-0
+
+xrandr --output $m1 --mode 1920x1080 -r 120 --pos 0x0 --primary
+xrandr --output $m2 --off

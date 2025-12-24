@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+#mc
+f=~/.config/mc/ini
+awk 'BEGIN{FS="=";OFS="="} $1=="skin"{gsub(".*","modarcon16",$2)}1' $f > $f.tmp &&
+mv $f.tmp $f

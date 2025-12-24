@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+. k-vars.sh
+aft-mtp-mount $k/mnt/xi

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# cd ~/.steam/steam/steamapps/common/Terraria
+cd ~/.local/share/Steam/steamapps/common/Terraria/
+tmux new -s terraria ./TerrariaServer

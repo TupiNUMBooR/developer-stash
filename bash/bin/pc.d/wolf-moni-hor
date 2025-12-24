@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+m1=eDP-1
+m2=HDMI-1-0
+
+xrandr --output $m1 --mode 1920x1080 -r 120 --pos 0x0
+xrandr --output $m2 --mode 2560x1440 -r 60 --pos 1920x0 --primary
+xrandr --output $m2 --mode 2560x1440 -r 75 --pos 1920x0 --primary
+feh --recursive --bg-fill --randomize ~/k/.wallpaper

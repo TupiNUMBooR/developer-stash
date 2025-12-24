@@ -1,0 +1,9 @@
+[user]
+	name = TupiNUMBooR@Wolf
+	email = tupinumboor@gmail.com
+[init]
+	defaultBranch = dev
+[push]
+	autoSetupRemote = true
+[core]
+	autocrlf = input

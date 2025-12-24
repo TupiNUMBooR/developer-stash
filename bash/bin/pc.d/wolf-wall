@@ -1,0 +1,2 @@
+#!/bin/sh
+feh --recursive --bg-fill --randomize ~/k/localhost/.wallpaper

@@ -1,0 +1,4 @@
+#!/bin/bash
+. k-vars.sh
+cd $k/dev/keller/khome
+. c2.sh

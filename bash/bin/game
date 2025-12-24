@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+err() { echo -e "\e[1;91m$1\e[0m"; }
+
+cd "$BASH_SOURCE.d"
+f="$1"
+if [ ! -f "$f" ]; then
+  err "You can choose from:"
+  ls *
+  exit 1
+fi
+"./$f" "${@:2}"

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+sess=amicrosocks
+if ! $(tmux has -t $sess 2> /dev/null); then
+    tmux new-session -d -s $sess \
+    microsocks -1 -u chapka -P DokoleK0lbasa
+fi

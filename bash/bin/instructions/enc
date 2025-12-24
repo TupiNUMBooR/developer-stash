@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+help() {
+  echo "usage: enc [e|d] [data] [pass]"
+  exit 1
+}
+
+[ -z $1 ] || [ -z $2 ] && help
+
+p=$3
+if [ -z $p ]; then
+  read -sp "Password: " p
+  echo
+  if [ "$1" == "e" ]; then
+    read -sp "Repeat it: " p2
+    echo
+    if [ "$p" != "$p2" ]; then
+      echo "Wrong pass!"
+      exit 1
+    fi
+  fi
+fi
+
+case $1 in
+  e)
+    echo $2 | openssl aes-256-cbc -pbkdf2 -a -e -salt -pass pass:$p
+    ;;
+  d)
+    echo $2 | openssl aes-256-cbc -pbkdf2 -a -d -salt -pass pass:$p
+    ;;
+  *)
+    help
+esac

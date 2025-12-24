@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+cd ~/k/dev/keller/k-lib/diary
+vim $(date +%F).md

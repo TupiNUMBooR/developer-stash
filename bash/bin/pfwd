@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+is_valid_port() {
+  if [[ $1 =~ "^[0-9]+$" ]] && (( $1 >= 1 && $1 <= 65535 )); then
+    return 0
+  else
+    return 1
+  fi
+}
+
+sess=pfwd-$1
+if ! $(tmux has -t $sess 2> /dev/null); then
+    tmux new-session -d -s $sess \
+    autossh -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -R *:$1:127.0.0.1:$1 vpn5
+fi

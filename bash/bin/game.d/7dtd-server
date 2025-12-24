@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+cd ~/.steam/steam/steamapps/common/"7 Days to Die Dedicated Server"
+
+sess=7dtd-server
+if ! $(tmux has -t $sess 2> /dev/null); then
+    tmux new-session -d -s $sess \
+    ./startserver.sh -configfile=serverconfig.xml
+fi
+
+pfwd() {
+  sess=pfwd-$1
+  if ! $(tmux has -t $sess 2> /dev/null); then
+      tmux new-session -d -s $sess \
+        autossh -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -R $1:127.0.0.1:$1 vpn5
+  fi
+}
+
+pfwd 26900
+
+telnet 127.0.0.1 8081 ||
+sleep 10 &&
+telnet 127.0.0.1 8081

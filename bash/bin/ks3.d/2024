@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e
+. k-vars.sh
+
+from=$k/to-sync/*
+to=$k/mnt/khist2024
+
+test-mount $to
+log-rsync $from $to
+$pre rsync -vahPi $args $from $to
+
+from=$k/mnt/kstore-v2/
+to=$k/mnt/khist2024
+
+test-mount $from
+test-mount $to
+log-rsync $from $to
+$pre rsync -ahPi $args $from $to

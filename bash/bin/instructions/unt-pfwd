@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+for port in {27015..27016}; do
+  echo sudo ufw allow $port
+  for protocol in tcp udp; do
+    echo ipfwd eth0 10.8.0.2 -A $protocol $port
+  done
+done

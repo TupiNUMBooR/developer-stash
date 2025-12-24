@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -e
+shopt -s globstar
+path=${1:-.}
+max_procs=${2:-8}
+
+find -type f -regextype posix-extended -iregex '.*\.(jpe?g|png|webp|bmp)'
+echo cv-avif $path $max_procs
+[ "$path" == "." ] && read -p "enter to continue..."
+((i=0)) || :
+
+cv() {
+  [ ! -f "$f" ] && return
+  ((i > "$max_procs")) && wait -n || sleep 0.01
+  ((++i))
+  echo $1 $i
+  convert "$1" "${1%.*}.avif" && rm "$1" && echo "$i" &
+}
+
+
+for f in $path/**/*.{jp{,e}g,JP{,E}G,png,webp,bmp}; do
+  cv "$f"
+done
+echo wait && wait

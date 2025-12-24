@@ -1,0 +1,21 @@
+#!/bin/bash
+
+rm -f ~/.IntelliJIdea*/config/eval/idea*.evaluation.key
+rm -f ~/.Rider*/config/eval/*.evaluation.key
+rm -f ~/.config/JetBrains/*/eval/*.evaluation.key
+
+sed -i '/evlsprt/d' ~/.IntelliJIdea*/config/options/options.xml
+sed -i '/evlsprt/d' ~/.Rider*/config/options/other.xml
+sed -i '/evlsprt/d' ~/.config/JetBrains/*/options/other.xml
+
+sed -i '/evlsprt/d' ~/.java/.userPrefs/prefs.xml
+sed -i '/JetBrains.UserIdOnMachine/d' ~/.java/.userPrefs/prefs.xml
+rm -rf ~/.java/.userPrefs/jetbrains
+
+#/etc/hosts
+#0.0.0.0		account.jetbrains.com
+#0.0.0.0		www.jetbrains.com
+#0.0.0.0		www-weighted.jetbrains.com
+
+ # C:\Users\k\.Rider2019.3\config C:\Users\k\AppData\Roaming\JetBrains\Rider2020.1
+ # Computer\HKEY_CURRENT_USER\SOFTWARE\{JavaSoft,JetBrains}

@@ -1,0 +1,22 @@
+#!/bin/bash
+. k-vars.sh
+crypto=$k/crypto
+links=$k/mnt
+prog=$1
+file=$2
+
+log() { echo -e "\e[36m$1 mount\e[32m $2\e[36m to\e[32m $3\e[0m"; }
+
+[ -z "$prog" ] || [ -z "$file" ] && err "Usage: kc2 [cry] [2020]" 1
+[ "$prog" == cry ] || [ "$prog" == enc ] && prog="${prog}fs"
+
+cd $crypto/$prog
+for f in *"$file"*; do
+  if mount | grep " $links/$f " >/dev/null; then
+    echo -e "\e[32m$links/$f\e[31m already mounted\e[0m"
+    continue
+  fi
+  
+  log "$prog" "$crypto/$prog/$f" "$links/$f"
+  $prog "$crypto/$prog/$f" "$links/$f"
+done

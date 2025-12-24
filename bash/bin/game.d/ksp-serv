@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+cd ~/.steam/steam/steamapps/common/"Kerbal Space Program"/DMPServer
+./DMPServer.exe

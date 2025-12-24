@@ -1,0 +1,36 @@
+#!/bin/bash
+set -euo pipefail
+
+. k-vars.sh
+header2 "kbkp git"
+dev="$k/to-sync/backups/git"
+
+cd "$dev"
+for f in *.7z; do (
+  echo "7z x $f"
+  7z x -bso0 "$f"
+) & done
+wait
+
+for f in *.git; do (
+  echo "fetching $f"
+  cd "$dev/$f"
+  r=${f##*/}
+  fetched=$(git fetch --porcelain)
+  echo $fetched
+  if [ -n "$fetched" ] || ! [ -f "../$f.7z" ]; then
+    git lfs fetch --all
+    cd ..
+    rm -f "$f.7z"
+    7z a -mx9 -bso0 "$f.7z" "$f"
+    rm -rf $f
+    echo "7z a $f"
+  else
+    cd ..
+    rm -rf $f
+    echo "$f skipped and removed"
+  fi
+) & done
+wait
+
+header2 "kbkp git done"

@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+bin="$(realpath "$(dirname "$BASH_SOURCE")")"
+echo "$@" | proxychains xargs -n1 -P8 "$bin/k-dl3.py" -d ~/k/port/dl -c "$bin/cookies.txt"

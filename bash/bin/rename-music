@@ -1,0 +1,9 @@
+#!/bin/bash
+
+get() {
+  ffprobe -loglevel error -show_entries "format_tags=$1" -of default=noprint_wrappers=1:nokey=1 "$2"
+}
+
+for f in "$@"; do
+  mv "$f" "$(get artist "$f") - $(get title "$f").${f##*.}"
+done

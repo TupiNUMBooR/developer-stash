@@ -1,0 +1,8 @@
+sess=sleep_with_progress
+tmux new-session -d -s sleep_with_progress 'sleep_with_progress 3'
+tmux split-window -v -t sleep_with_progress 'sleep_with_progress 2'
+tmux split-window -v -t sleep_with_progress 'sleep_with_progress 1'
+tmux select-layout -t sleep_with_progress even-vertical
+echo 1
+tmux attach-session -t sleep_with_progress
+echo 2

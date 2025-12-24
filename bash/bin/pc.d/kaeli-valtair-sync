@@ -1,0 +1,28 @@
+#!/bin/bash
+set -e
+
+kbkp khome || :
+
+sess=kaeli-sync
+tmux new-session -d -s $sess 'kbkp torrents'
+tmux split-window -v -t $sess 'kbkp git'
+tmux split-window -h -t $sess 'kbkp trello'
+# tmux split-window -v -t $sess 'kbkp chatgpt'
+tmux split-window -h -t $sess 'ks3 uw'
+tmux select-layout -t $sess even-vertical
+tmux attach-session -t $sess
+sync
+
+ks3 kstore || :
+ks3 2024 || :
+sync
+
+sess=kaeli-sync
+# tmux new-session -d -s $sess 'ks3 -d to-kret'
+tmux new-session -d -s $sess 'ks3 -d opi1-export'
+tmux split-window -v -t $sess 'ks3 -d vpn4'
+tmux split-window -h -t $sess 'ks3 -d vpn5'
+tmux split-window -v -t $sess 'ks3 -d vpn3'
+tmux select-layout -t $sess even-vertical
+tmux attach-session -t $sess
+sync

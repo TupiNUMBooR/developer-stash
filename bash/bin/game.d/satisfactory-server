@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+cd ~/.steam/steam/steamapps/common/SatisfactoryDedicatedServer
+tmux a -t satisfactory-server ||
+tmux new-session -s satisfactory-server ./FactoryServer.sh

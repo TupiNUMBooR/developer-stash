@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+set -e
+. k-vars.sh
+shopt -s extglob
+
+cd ~/.minecraft
+day=$(date -u +%F)
+hour=$(date -u +%F_%H)
+o=$1
+shift
+case $o in
+bkp)
+  # ~100 KiB
+  bkp() {
+    cd "$1"
+    l=${1##*/}
+    mkdir -p "$c/$l"
+    rsync -q !(*.jar) "$c/$l"
+    rsync -qa config "$c/$l"
+    find !(assets) > "$c/$l/files.list"
+  }
+
+  c="$khist/backups/MineCraft/config_$hour"
+  bkp ~/.minecraft
+  bkp $k/soft/MineCraft/server-forge
+  bkp $k/soft/MineCraft/server-fabric
+  cd "$c/.."
+  zip -qr "config_$hour.zip" "config_$hour"
+  rm -rf "$c"
+  ;;
+
+bkpw)
+  # 100-700 MiB
+  cd $k/soft/MineCraft/server-forge
+  bkph=$khist_l/backups/MineCraft
+  mkdir -p $bkph
+  notify-send "Making MineCraft backup..." || echo fail notify-send
+
+  for w in $@; do
+    if [ ! -d $w ]; then
+      err "World $w doesn't exist"
+      continue
+    fi
+    z=$w"_"$hour.zip
+    zip -qr - $w | pv -bep -s $(du -bs $w | awk '{print $1}') > $bkph/$z
+  done
+
+  notify-send $(cd $bkph; du -h $z) || echo fail notify-send
+
+  #cd $bkph &&
+  #find -type f -name "*.zip" -mtime +30 -print0 | xargs -r0 rm 2>&1
+
+  ;;
+
+client)
+  java -jar TLauncher-MCL.jar
+  ;;
+
+forge)
+  cd "$k/soft/MineCraft/server-forge"
+  tmux a -t minecraft ||
+    tmux new -s minecraft ./run.sh
+  
+  ;;
+
+fabric)
+  cd "$k/soft/MineCraft/server-fabric"
+  tmux a -t minecraft ||
+    tmux new -s minecraft java -Xmx8g -jar fabric-server*.jar nogui
+  ;;
+
+java)
+  update-alternatives --config java
+  ;;
+
+
+*)
+  err "Can't mc $o"
+  ;;
+
+esac

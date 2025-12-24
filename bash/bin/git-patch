@@ -1,0 +1,8 @@
+#!/bin/bash
+set -e
+[ ! -f "$1" ] && echo error && exit 1
+# git apply $1
+git status
+read
+git add .
+git commit -m "Apply $(basename $1)"

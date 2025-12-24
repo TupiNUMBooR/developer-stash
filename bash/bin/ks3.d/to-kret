@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e
+. k-vars.sh
+
+ks() {
+  log-rsync ${@:2} $1
+  $pre rsync --info=progress2 --modify-window=1 --update --recursive $args ${@:2} $1 # | grep -E '^[^.]'
+}
+
+from=~/k/crypto/cryfs
+to=/run/media/keller/kret/k/cloud
+
+# ks $to/Google.Drive/2023 $from/khist-y2023
+
+ks $to/YandexDisk/2023 $from/khist-y2023{,-heavy}
+ks $to/YandexDisk/2021 $from/khistory-v2021
+
+ks $to/../music/ ~/k/music/ 

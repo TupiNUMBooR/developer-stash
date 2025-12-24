@@ -1,0 +1,11 @@
+#!/bin/sh
+m1=DP-1
+m2=DP-2
+
+xrandr --output $m1 --mode 1920x1080 -r 60 --pos 0x200
+xrandr --output $m2 --mode 2560x1440 -r 144 --pos 1920x0 --primary
+
+sudo systemctl restart iwd && echo restart iwd &
+# sudo modprobe i2c-dev && echo modprobe i2c-dev &&
+# sudo ddcutil setvcp 10 100 && echo ddcutil &
+wait

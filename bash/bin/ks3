@@ -1,0 +1,21 @@
+#!/bin/bash
+err() { echo -e "\e[1;91m$1\e[0m"; }
+
+while getopts "dne" o; do
+  case $o in
+  e) export pre="echo" ;;
+  d) export args="$args --delete" ;;
+  n) export args="$args -n" ;;
+  esac
+done
+shift $(($OPTIND - 1))
+
+cd "$BASH_SOURCE.d"
+f="$1"
+if [ ! -f "$f" ]; then
+  err "You can choose from:"
+  ls *
+  exit 1
+fi
+
+"./$f" "${@:2}"

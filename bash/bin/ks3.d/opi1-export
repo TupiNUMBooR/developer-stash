@@ -1,0 +1,23 @@
+#!/bin/bash
+# https://wiki.termux.com/wiki/Internal_and_external_storage
+. k-vars.sh
+set -e
+shopt -s extglob
+
+termux="opi1:/data/data/com.termux/files/home"
+termux2="$termux/storage/shared/k"
+
+header "======= ksync opi1 export ======="
+
+header "export ~/.ssh"
+$pre rsync $args -ah --update ~/.ssh/config $termux/.ssh || echo fail
+
+header "export ~/.local/bin"
+$pre rsync $args -ahPi --update ~/.local/bin/ "$termux/bin"
+
+header "export crypto"
+$pre rsync $args -ah --update --info=progress2 "$k/crypto/cryfs/kstore-v2" "$termux2/crypto/cryfs"
+$pre rsync $args -ahPi --update "$k/crypto/aes/uw.aes" "$termux2/crypto/aes"*
+
+header "export music"
+$pre rsync $args -ahPi --update "$k/store/coll/music/"!(collections) "$termux2/store/coll/music" | grep -E '^[^.]'

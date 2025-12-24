@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -e
+
+pfwd() {
+  sess=pfwd-$1
+  if ! $(tmux has -t $sess 2> /dev/null); then
+      tmux new-session -d -s $sess \
+      autossh -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -R $1:127.0.0.1:$1 vpn5
+  fi
+}
+
+pfwd 5000
+
+sess=deez-dwn
+if ! $(tmux has -t $sess 2> /dev/null); then
+    tmux new-session -d -s $sess \
+    deezer-downloader --config .config/deezer-downloader.ini
+fi

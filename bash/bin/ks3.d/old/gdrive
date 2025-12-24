@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+from=~/k/crypto/cryfs/kstore-2022-v2
+disk=/run/media/keller/kret
+to=$disk/k/Google.Drive/2022
+if ! mount | grep " $disk " >/dev/null; then
+  echo -e "\e[32m$disk \e[31mnot mounted\e[0m"
+  exit 1
+fi
+echo -e "\e[32m$from \e[36m==rsync=> \e[32m$to\e[0m"
+$pre rsync -aLhPi $args $from "$to" | grep -E '^[^.]'

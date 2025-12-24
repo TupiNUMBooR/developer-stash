@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+getopts "f:" o
+[ -z "$OPTARG" ] && fname="*" || fname="$OPTARG"
+shift $(($OPTIND - 1))
+
+IFS=$'\n'
+for arg in "$@"; do
+  # for d in $(find "$arg" -type d); do
+  c=$(find "$arg" -type f -name "$fname" -exec cat {} + | wc -l)
+  ((c > 0)) && s+="$c $arg\n"
+  # done
+done
+unset IFS
+printf "$s" | column -tR1 | sort -n

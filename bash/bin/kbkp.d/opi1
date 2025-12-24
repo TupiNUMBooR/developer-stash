@@ -1,0 +1,38 @@
+#!/bin/bash
+# https://wiki.termux.com/wiki/Internal_and_external_storage
+. k-vars.sh
+set -e
+shopt -s extglob
+
+device=opi1
+termux_home="/data/data/com.termux/files/home"
+termux="$device:$termux_home"
+termux2="$termux/storage/shared/k"
+to="$k/port/from-opi1"
+
+header "======= ksync opi1 import ======="
+
+mkdir -p $to
+
+header "export downloads"
+rsync -aLhPi "$termux/storage/downloads" "$to"
+
+header "export KateMobile"
+[ -d "$termux/storage/shared/KateDownloads" ] && rsync -aLhPi "$termux/storage/shared/KateDownloads" "$to" || :
+[ -d "$termux/storage/shared/KatePhotos" ] && rsync -aLhPi "$termux/storage/shared/KatePhotos" "$to" || :
+
+header "export dcim"
+rsync -aLhPi "$termux/storage/dcim" "$to"
+# | grep -E '^[^.]'
+
+header "cleaning up"
+find "$to" -type d -empty -print -delete
+
+read -p "Clear xibeta (y/n)? " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  echo deleting
+  ssh $device "rm -vrf $termux_home/storage/shared/{DCIM,KatePhotos}/*"
+else
+  echo cancelled
+fi
