@@ -1,0 +1,20 @@
+name: "spring-template-local"
+
+services:
+
+  postgres:
+    # https://hub.docker.com/_/postgres
+    image: "postgres:15"
+    restart: "always"
+    shm_size: "128mb"
+    ports:
+      - "5432:5432"
+    volumes:
+      - "postgres:/var/lib/postgresql/data/:rw"
+    environment:
+      POSTGRES_PASSWORD: "test"
+      POSTGRES_USER: "test"
+      POSTGRES_DB: "test"
+
+volumes:
+  postgres:
